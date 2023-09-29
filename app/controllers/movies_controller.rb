@@ -14,4 +14,55 @@ class MoviesController < ApplicationController
 
     render({ :template => "movie_templates/show" })
   end
+
+  def create
+    @new_movie = Movie.new
+    @new_movie.title = params.fetch("query_title")
+    @new_movie.year = params.fetch("query_year")
+    @new_movie.duration = params.fetch("query_duration")
+    @new_movie.description = params.fetch("query_description")
+    @new_movie.image = params.fetch("query_image")
+    @new_movie.director_id = params.fetch("query_director_id")
+   
+
+    if @new_movie.valid?
+      @new_movie.save
+      redirect_to("/movies", { :notice => "Movie created successfully."} )
+    else
+      redirect_to("/movies", { :alert => "Movie failed to create successfully." })
+    end
+  end
+
+  def update
+    movie_id = params.fetch("path_id")
+    @the_movie = Movie.where({:id => movie_id}).at(0)
+
+    @the_movie.title = params.fetch("query_title")
+    @the_movie.year = params.fetch("query_year")
+    @the_movie.duration = params.fetch("query_duration")
+    @the_movie.description = params.fetch("query_description")
+    @the_movie.image = params.fetch("query_image")
+    @the_movie.director_id = params.fetch("query_director_id")
+   
+
+    if @the_movie.valid?
+      @the_movie.save
+      redirect_to("/movies/#{@the_movie.id}", { :notice => "Movie updated successfully."} )
+    else
+      redirect_to("/movies/#{@the_movie.id}", { :alert => "Movie failed to update successfully." })
+    end
+
+  end
+
+
+  def destroy
+    the_id = params.fetch("path_id")
+    @movie = Movie.where({ :id => the_id })[0]
+
+    @movie.destroy
+
+    redirect_to("/movies", { :notice => "Movie deleted successfully."} )
+  end
+
+
 end

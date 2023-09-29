@@ -43,7 +43,7 @@ class DirectorsController < ApplicationController
     @new_director.dob = params.fetch("query_dob")
     @new_director.bio = params.fetch("query_bio")
     @new_director.image = params.fetch("query_image")
-    @new_director.save
+    
 
     if @new_director.valid?
       @new_director.save
