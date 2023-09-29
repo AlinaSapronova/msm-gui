@@ -36,4 +36,55 @@ class DirectorsController < ApplicationController
 
     render({ :template => "director_templates/eldest" })
   end
+
+  def create
+    @new_director = Director.new
+    @new_director.name = params.fetch("query_name")
+    @new_director.dob = params.fetch("query_dob")
+    @new_director.bio = params.fetch("query_bio")
+    @new_director.image = params.fetch("query_image")
+    @new_director.save
+
+    if @new_director.valid?
+      @new_director.save
+      redirect_to("/directors", { :notice => "Director created successfully." })
+    else
+      redirect_to("/directors", { :notice => "Director failed to create successfully." })
+    end
+  end
+
+
+  def update
+    the_id = params.fetch("path_id")
+    @director = Director.where({ :id => the_id })[0]
+
+    @director.name = params.fetch("query_name")
+    @director.dob = params.fetch("query_dob")
+    @director.bio = params.fetch("query_bio")
+    @director.image = params.fetch("query_image")
+    @director.save
+
+
+    if @director.valid?
+      @director.save
+      redirect_to("/directors/#{@director.id}", { :notice => "Director updated successfully."} )
+    else
+      redirect_to("/directors/#{@director.id}", { :alert => "Director failed to update successfully." })
+    end
+  end
+
+
+  def destroy
+    the_id = params.fetch("path_id")
+    @director = Director.where({ :id => the_id }).at(0)
+
+    @director.destroy
+
+    redirect_to("/directors", { :notice => "Director deleted successfully."} )
+  end
+
+  
+
+
+  
 end
